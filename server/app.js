@@ -27,15 +27,16 @@ io.on('connection', (socket) => {
             text: message.text,
             at: (new Date()).getTime()
         });
-        cb('Done');
+        cb();
     });
-    socket.on('createLocation', (location) => {
+    socket.on('createLocation', (location,cb) => {
         io.emit('newLocation', {
             from: location.from,
             latitude: location.latitude,
             longitude: location.longitude,
             at: (new Date()).getTime()
         })
+        cb();
     });
     socket.on('disconnect', () => {
         console.log('some one disconnected')

@@ -1,0 +1,35 @@
+#messagePanel{
+    position: absolute;
+    top: 0;
+    background-image: url("Mate10_theme_Moment_home_wallpaper_0-min.jpg");
+}
+#peoplePanel{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url("photo-1520987623799-101883d6585a.jpg");
+}
+#input {
+    position: absolute;
+    left: 10px;
+}
+#message {
+    position: absolute;
+}
+#messages {
+    position: absolute;
+    background: rgba(255,255,255,0.6);
+    left: 10px;
+    top: 10px;
+    border-radius: 10px;
+}
+.button {
+    color: black;
+    background-color: #e6f2ff;
+    border-radius: 5px 5px 5px 5px;
+    position: absolute;
+}
+li {
+    margin-top: 5px;
+    list-style-type: none;
+}
