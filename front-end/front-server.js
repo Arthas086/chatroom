@@ -10,12 +10,12 @@ socket.on('disconnect', () => {
 
 socket.on('newMessage', (message) => {
     var li = document.createElement('li');
-    li.innerText = `${message.from}: ${message.text}`;
+    li.innerHTML = `<p>${message.from}: ${message.text}<sub style="color: grey">   ${message.at}</sub></p>`;
     document.getElementById('list').appendChild(li);
 });
 socket.on('newLocation', (location) => {
     var li = document.createElement('li');
-    li.innerHTML = `${location.from}: <a href="https://maps.google.com/?q=${location.latitude},${location.longitude}" target="_blank">Location</a>`;
+    li.innerHTML = `<p>${location.from}: <a href="https://maps.google.com/?q=${location.latitude},${location.longitude}" target="_blank">Location</a><sub style="color: grey">   ${location.at}</sub></p>`;
     document.getElementById('list').appendChild(li);
 });
 
