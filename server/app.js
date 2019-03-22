@@ -22,12 +22,20 @@ io.on('connection', (socket) => {
         text: 'new user joined'
     });
     socket.on('createMessage', (message, cb) => {
-        io.emit('newMessage',{
+        io.emit('newMessage', {
             from: message.from,
             text: message.text,
             at: (new Date()).getTime()
         });
         cb('Done');
+    });
+    socket.on('createLocation', (location) => {
+        io.emit('newLocation', {
+            from: location.from,
+            latitude: location.latitude,
+            longitude: location.longitude,
+            at: (new Date()).getTime()
+        })
     });
     socket.on('disconnect', () => {
         console.log('some one disconnected')
