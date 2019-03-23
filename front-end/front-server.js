@@ -9,14 +9,18 @@ socket.on('disconnect', () => {
 });
 
 socket.on('newMessage', (message) => {
-    var li = document.createElement('li');
-    li.innerHTML = `<p>${message.from}: ${message.text}<sub style="color: grey">   ${message.at}</sub></p>`;
-    document.getElementById('list').appendChild(li);
+    var div = document.createElement('div');
+    div.innerHTML = `<span style="background: rgba(204, 230, 255, 0.5); padding: 5px; box-shadow: 3px 3px 3px grey; border-radius: 5px">${message.from}: ${message.text}<sub style="color:grey"> ${message.at}</sub></span>`;
+    div.style.marginTop = '15px';
+    document.getElementById('messages').appendChild(div);
+    scrollButtom();
 });
 socket.on('newLocation', (location) => {
-    var li = document.createElement('li');
-    li.innerHTML = `<p>${location.from}: <a href="https://maps.google.com/?q=${location.latitude},${location.longitude}" target="_blank">Location</a><sub style="color: grey">   ${location.at}</sub></p>`;
-    document.getElementById('list').appendChild(li);
+    var div = document.createElement('div');
+    div.innerHTML = `<span style="background: rgba(204, 230, 255, 0.5); padding: 5px; box-shadow: 3px 3px 3px grey; border-radius: 5px">${location.from}: <a href="https://maps.google.com/?q=${location.latitude},${location.longitude}" target="_blank">Location</a><sub style="color: grey"> ${location.at}</sub></span>`;
+    div.style.marginTop = '15px';
+    document.getElementById('messages').appendChild(div);
+    scrollButtom();
 });
 
 
@@ -42,7 +46,7 @@ function getLocation() {
             from: 'user',
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-        },function () {
+        }, function () {
             location.disabled = false;
             location.value = "Location";
         })
@@ -53,28 +57,36 @@ function getLocation() {
 
     })
 }
+
 function load() {
     var peoplePanel = document.getElementById('peoplePanel');
     peoplePanel.style.height = window.innerHeight + "px";
-    peoplePanel.style.width = window.innerWidth/6 + "px";
-    peoplePanel.style.backgroundSize = window.innerWidth/6 + "px " + window.innerHeight + "px";
+    peoplePanel.style.width = window.innerWidth / 6 + "px";
+    peoplePanel.style.backgroundSize = window.innerWidth / 6 + "px " + window.innerHeight + "px";
     var messagePanel = document.getElementById('messagePanel');
     messagePanel.style.height = window.innerHeight + "px";
-    messagePanel.style.width = 5*window.innerWidth/6 + "px";
-    messagePanel.style.left = (window.innerWidth/6 + 5) + "px";
-    messagePanel.style.backgroundSize = 5*window.innerWidth/6 + "px " + window.innerHeight + "px";
+    messagePanel.style.width = 5 * window.innerWidth / 6 + "px";
+    messagePanel.style.left = (window.innerWidth / 6 + 5) + "px";
+    messagePanel.style.backgroundSize = 5 * window.innerWidth / 6 + "px " + window.innerHeight + "px";
     var message = document.getElementById('message');
-    message.style.width = (5*window.innerWidth/6 - 210) + "px";
+    message.style.width = (5 * window.innerWidth / 6 - 210) + "px";
     message.focus();
-    document.getElementById('send').style.left = (5+5*window.innerWidth/6 - 210) + "px";
-    document.getElementById('location').style.left = (5+5*window.innerWidth/6 - 210 + 70) + "px";
+    document.getElementById('send').style.left = (5 + 5 * window.innerWidth / 6 - 210) + "px";
+    document.getElementById('location').style.left = (5 + 5 * window.innerWidth / 6 - 210 + 70) + "px";
     document.getElementById('input').style.top = (window.innerHeight - 40) + "px";
     var messages = document.getElementById('messages');
-    messages.style.height = (window.innerHeight - 60) + "px";
-    messages.style.width = (5*window.innerWidth/6 - 30) + "px";
+    messages.style.height = (window.innerHeight - 100) + "px";
+    messages.style.width = (5 * window.innerWidth / 6 - 30) + "px";
 }
+
 function keyClick(event) {
-    if(event.keyCode === 13){
+    if (event.keyCode === 13) {
         sender();
+    }
+}
+function scrollButtom() {
+    var messages = document.getElementById('messages');
+    if (messages.clientHeight + messages.scrollTop + 80 >= messages.scrollHeight) {
+        messages.scrollTop = messages.scrollHeight;
     }
 }

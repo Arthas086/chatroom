@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="CSS.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="front-server.js"></script>
@@ -9,8 +10,7 @@
 <body onload="load()" onkeydown="keyClick(event)">
 
 <div id="messagePanel">
-    <div id="messages">
-    <ul id="list" style="color: black; position: absolute; left: 0; border: black"></ul>
+    <div id="messages" style="padding: 20px ;overflow:scroll">
     </div>
     <div id="input">
     <input type="text" placeholder="message" id="message">

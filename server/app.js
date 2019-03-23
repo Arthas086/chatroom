@@ -17,18 +17,18 @@ io.on('connection', (socket) => {
     socket.emit('newMessage', {
         from: 'admin',
         text: 'welcome to our chat room',
-        at: moment().format('h:mm a')
+        at: moment().format('H:mm')
     });
     socket.broadcast.emit('newMessage', {
         from: 'admin',
         text: 'new user joined',
-        at: moment().format('h:mm a')
+        at: moment().format('H:mm')
     });
     socket.on('createMessage', (message, cb) => {
         io.emit('newMessage', {
             from: message.from,
             text: message.text,
-            at: moment().format('h:mm a')
+            at: moment().format('H:mm')
         });
         cb();
     });
@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
             from: location.from,
             latitude: location.latitude,
             longitude: location.longitude,
-            at: moment().format('h:mm a')
+            at: moment().format('H:mm')
         });
         cb();
     });
