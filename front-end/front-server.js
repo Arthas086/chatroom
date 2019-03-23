@@ -2,6 +2,15 @@ const socket = io();
 
 socket.on('connect', () => {
     console.log('Connected to server');
+
+    socket.emit('join', deparam(), function (err) {
+        if (err) {
+            alert('invalid name');
+            window.location.href = 'index.html';
+        } else {
+            console.log('welcome');
+        }
+    })
 });
 
 socket.on('disconnect', () => {
@@ -21,6 +30,28 @@ socket.on('newLocation', (location) => {
     div.style.marginTop = '15px';
     document.getElementById('messages').appendChild(div);
     scrollButtom();
+});
+socket.on('newUser', function (name) {
+    var div = document.createElement('div');
+    div.innerHTML = `<span style="background: rgba(204, 230, 255, 0.5); padding: 5px; box-shadow: 3px 3px 3px grey; border-radius: 5px">${name}</span>`;
+    div.style.marginTop = '15px';
+    document.getElementById('peoplePanel').appendChild(div);
+});
+socket.on('allUsers', function (users) {
+    for (name of users) {
+        var div = document.createElement('div');
+        div.innerHTML = `<span style="background: rgba(204, 230, 255, 0.5); padding: 5px; box-shadow: 3px 3px 3px grey; border-radius: 5px">${name}</span>`;
+        div.style.marginTop = '15px';
+        document.getElementById('peoplePanel').appendChild(div);
+    }
+});
+socket.on('exitUser', function (name) {
+    var peoplePanel = document.getElementById('peoplePanel');
+    for (child of peoplePanel.children) {
+        if (child.children[0].innerHTML === name) {
+            peoplePanel.removeChild(child);
+        }
+    }
 });
 
 
@@ -75,7 +106,7 @@ function load() {
     document.getElementById('location').style.left = (5 + 5 * window.innerWidth / 6 - 210 + 70) + "px";
     document.getElementById('input').style.top = (window.innerHeight - 40) + "px";
     var messages = document.getElementById('messages');
-    messages.style.height = (window.innerHeight - 100) + "px";
+    messages.style.height = (window.innerHeight - 60) + "px";
     messages.style.width = (5 * window.innerWidth / 6 - 30) + "px";
 }
 
@@ -84,9 +115,24 @@ function keyClick(event) {
         sender();
     }
 }
+
 function scrollButtom() {
     var messages = document.getElementById('messages');
     if (messages.clientHeight + messages.scrollTop + 80 >= messages.scrollHeight) {
         messages.scrollTop = messages.scrollHeight;
     }
 }
+
+function deparam() {
+    var uri = window.location.search;
+    var queryString = {};
+    uri.replace(
+        new RegExp(
+            "([^?=&]+)(=([^&#]*))?", "g"),
+        function ($0, $1, $2, $3) {
+            queryString[$1] = decodeURIComponent($3.replace(/\+/g, '%20'));
+        }
+    );
+    return queryString;
+}
+

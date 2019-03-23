@@ -3,7 +3,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const pathModule = require('path');
 const moment = require('moment');
-
+const users = [];
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -24,17 +24,28 @@ io.on('connection', (socket) => {
         text: 'new user joined',
         at: moment().format('H:mm')
     });
+    socket.on('join', (params, cb) => {
+        if (params.name.trim().length > 0) {
+            socket.name = params.name;
+            users.push(params.name);
+            socket.broadcast.emit('newUser', params.name);
+            socket.emit('allUsers', users);
+            cb();
+        } else {
+            cb('ops!');
+        }
+    });
     socket.on('createMessage', (message, cb) => {
         io.emit('newMessage', {
-            from: message.from,
+            from: socket.name,
             text: message.text,
             at: moment().format('H:mm')
         });
         cb();
     });
-    socket.on('createLocation', (location,cb) => {
+    socket.on('createLocation', (location, cb) => {
         io.emit('newLocation', {
-            from: location.from,
+            from: socket.name,
             latitude: location.latitude,
             longitude: location.longitude,
             at: moment().format('H:mm')
@@ -42,7 +53,9 @@ io.on('connection', (socket) => {
         cb();
     });
     socket.on('disconnect', () => {
-        console.log('some one disconnected')
+        console.log('some one disconnected');
+        users.splice(users.indexOf(socket.name), 1);
+        io.emit('exitUser', socket.name)
     })
 });
 

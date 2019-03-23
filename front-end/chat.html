@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="CSS.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="front-server.js"></script>
+</head>
+<body onload="load()" onkeydown="keyClick(event)">
+
+<div id="messagePanel">
+    <div id="messages" style="padding: 20px ;overflow:scroll">
+    </div>
+    <div id="input">
+    <input type="text" placeholder="message" id="message">
+    <input id="send" class="button" type="button" value="Send" style="width: 70px" onclick="sender()">
+    <input id="location" class="button" type="button" value="Location" style="width: 100px" onclick="getLocation()">
+    </div>
+</div>
+<div id="peoplePanel">
+
+</div>
+</body>
+</html>
