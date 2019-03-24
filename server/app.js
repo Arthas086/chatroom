@@ -14,20 +14,22 @@ app.use(express.static(pathModule.join(__dirname, '..', 'front-end')));
 
 io.on('connection', (socket) => {
     console.log('some one connected');
-    socket.emit('newMessage', {
-        from: 'admin',
-        text: 'welcome to our chat room',
-        at: moment().format('H:mm')
-    });
-    socket.broadcast.emit('newMessage', {
-        from: 'admin',
-        text: 'new user joined',
-        at: moment().format('H:mm')
-    });
     socket.on('join', (params, cb) => {
-        if (params.name.trim().length > 0) {
+        if (params.name.trim().length > 0 && params.room.trim().length > 0) {
             socket.name = params.name;
+            socket.room = params.room;
+            socket.join(params.room);
             users.push(params.name);
+            socket.emit('newMessage', {
+                from: 'admin',
+                text: 'welcome to our chat room',
+                at: moment().format('H:mm')
+            });
+            socket.broadcast.to(socket.room).emit('newMessage', {
+                from: 'admin',
+                text: `${socket.name} joined`,
+                at: moment().format('H:mm')
+            });
             socket.broadcast.emit('newUser', params.name);
             socket.emit('allUsers', users);
             cb();
@@ -36,7 +38,7 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('createMessage', (message, cb) => {
-        io.emit('newMessage', {
+        io.to(socket.room).emit('newMessage', {
             from: socket.name,
             text: message.text,
             at: moment().format('H:mm')
@@ -44,7 +46,7 @@ io.on('connection', (socket) => {
         cb();
     });
     socket.on('createLocation', (location, cb) => {
-        io.emit('newLocation', {
+        io.to(socket.room).emit('newLocation', {
             from: socket.name,
             latitude: location.latitude,
             longitude: location.longitude,
@@ -55,7 +57,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('some one disconnected');
         users.splice(users.indexOf(socket.name), 1);
-        io.emit('exitUser', socket.name)
+        io.to(socket.room).emit('exitUser', socket.name)
     })
 });
 
