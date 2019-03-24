@@ -57,7 +57,12 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('some one disconnected');
         users.splice(users.indexOf(socket.name), 1);
-        io.to(socket.room).emit('exitUser', socket.name)
+        io.emit('exitUser', socket.name);
+        io.to(socket.room).emit('newMessage', {
+            from: 'admin',
+            text: `${socket.name} has left`,
+            at: moment().format('H:mm')
+        });
     })
 });
 
